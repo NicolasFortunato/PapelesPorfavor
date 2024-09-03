@@ -1,52 +1,51 @@
 #Papeles Porfavor es la adaptacion criolla del famoso puzzle de simulacion Papers Please.
 #En esta adaptacion nos encontraremos con cambios significativos para el juego tal y como nuevos nombres para
 #los paises, provincias, ciudadanos, nuevos requisitos de acceso y mucho mas!
-
 #MENU DE OPCIONES 
 
 def mostrar_menu(tiempoRecord, ):
-    print("Bienvenido a Papeles, Por Favor. "/n)
+    print("Bienvenido a Papeles, Por Favor. \n")
     print("1. Iniciar juego")
     print("2. Opciones")
     print("3. Estadisticas")
     print("4. Salir al escritorio")
 
-    eleccionMenu = print("Seleccione una opcion: ")
+    eleccionMenu = int(input("Seleccione una opcion: "))
 #Jugar
     if eleccionMenu == 1:
         print("1. Juego nuevo")
         print("2. Cargar juego")
-        eleccionJuego = print("Seleccione una opcion: ")
+        eleccionJuego = int(input("Seleccione una opcion: "))
         if eleccionJuego == 1:
             return eleccionJuego
 #Cargar partida guardada
         else:
             partidaGuardada1 = print("1. Partida Guardada numero 1.")
-            partidaGuardada2 = print("2. Partida Guardada numero 2."/n)
-            eleccionPartidaGuardada = print("Seleccione una opcion: ")
+            partidaGuardada2 = print("2. Partida Guardada numero 2.\n")
+            eleccionPartidaGuardada = int(input("Seleccione una opcion: "))
             return eleccionPartidaGuardada
 #Opciones
     else:
         if eleccionMenu == 2:
-            print("1. Cantdad de inmigrantes "/n)
-            eleccionInmigrante = print("Seleccione una opcion: ")
+            print("1. Cantdad de inmigrantes \n")
+            eleccionInmigrante = int(input("S8eleccione una opcion: "))
             if eleccionInmigrante == 1:
-                print("1. 2 Inmigrantes."/n)
+                print("1. 2 Inmigrantes.\n")
                 print("2. 3 Inmigrantes")
         #Cantidad de inmigrantes
-                eleccionInmigrante = print("Seleccione una opcion")
+                eleccionInmigrante = int(input("Seleccione una opcion"))
                 return eleccionInmigrante
 #Estadisticas       
         else:
             if eleccionMenu == 3:
-                print("ESTADISTICAS"/n)
+                print("ESTADISTICAS\n")
                 print("Mayor timepo de juego: ",tiempoRecord)
                 print("Inmigrantes deportados: ",iDeportados)
                 print("Inmigrantes aceptados: ",iAceptados)
                 print("Dias alcanzados: ",diasJugados)
                 print("1. Salir")
                 """Capaz conviene returnear y ya esta"""
-                eleccionEstadisticas = print("Seleccione una opcion: ")
+                eleccionEstadisticas = int(input("Seleccione una opcion: "))
                 if eleccionEstadisticas == 1:
                     return 
             else:
@@ -55,7 +54,6 @@ def mostrar_menu(tiempoRecord, ):
     return eleccionMenu
 
 #CRONOMETRO (hay que importar TIME)
-#Hay que preguntar si esto se puede usar
 
 import time 
 tiempoRecord = None
