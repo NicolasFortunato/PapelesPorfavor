@@ -232,15 +232,6 @@ def main():
                     
         return eleccionMenu
 
-    #CRONOMETRO (hay que importar TIME)
-
-    def menu_estadisticas():
-
-
-            
-            
-            return recordTime
-
     #Cont de cuantos inmigrantes fueron aceptados o deportados para la parte de ESTADISTICAS
     def cont_Inmigrantes_Decision(decisionInmigrante):
         if decisionInmigrante == 1:
