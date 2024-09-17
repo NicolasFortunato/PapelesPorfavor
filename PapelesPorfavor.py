@@ -2,6 +2,7 @@
 #En esta adaptacion nos encontraremos con cambios significativos para el juego tal y como nuevos nombres para
 #los paises, provincias, ciudadanos, nuevos requisitos de acceso y mucho mas!
 #MENU DE OPCIONES 
+import time 
 
 def mostrar_menu(tiempoRecord, ):
     print("Bienvenido a Papeles, Por Favor. \n")
@@ -55,11 +56,10 @@ def mostrar_menu(tiempoRecord, ):
 
 #CRONOMETRO (hay que importar TIME)
 
-import time 
-tiempoRecord = None
 
 
-def menu_estadisticas(recordTime):
+def menu_estadisticas():
+    tiempoRecord = None
     tiempoInicial = time.time() #Arranca el cronometro
     print("Presiona Enter cuando termine el juego...")
 
