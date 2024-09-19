@@ -3,6 +3,7 @@
 #los paises, provincias, ciudadanos, nuevos requisitos de acceso y mucho mas!
 #MENU DE OPCIONES 
 import time 
+from juego import iniciar_juego
 
 def mostrar_menu(tiempoRecord, ):
     print("Bienvenido a Papeles, Por Favor. \n")
@@ -18,7 +19,8 @@ def mostrar_menu(tiempoRecord, ):
         print("2. Cargar juego")
         eleccionJuego = int(input("Seleccione una opcion: "))
         if eleccionJuego == 1:
-            return eleccionJuego
+            iniciar_juego()
+            # return eleccionJuego
 #Cargar partida guardada
         else:
             partidaGuardada1 = print("1. Partida Guardada numero 1.")
@@ -73,3 +75,5 @@ def menu_estadisticas():
         print("!Hay un nuevo record, y ese es: ",recordTime,"!")
     
     return recordTime
+
+mostrar_menu(100)
