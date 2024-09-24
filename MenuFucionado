@@ -204,8 +204,46 @@ def menuPrincipal():
                         return eleccionInmigrante  
                              
     
+                else:
+                    if eleccionMenu == 3:
+                        print("ESTADISTICAS\n")
+                        print("Mayor timepo de juego: ",)
+                        print("Inmigrantes deportados: ",)
+                        print("Inmigrantes aceptados: ",)
+                        print("Dias alcanzados: ",)
+                        print("1. Salir")
+                        """Capaz conviene returnear y ya esta"""
+                        eleccionEstadisticas = int(input("Seleccione una opcion: "))
+                        if eleccionEstadisticas == 1:
+                            return 
+                    else:
+                        print("Gracias por jugar Papeles, Por Favor.")
+                    
+        return eleccionMenu
+
+    #Cont de cuantos inmigrantes fueron aceptados o deportados para la parte de ESTADISTICAS
+def cont_Inmigrantes_Decision(decisionInmigrante):
+        if decisionInmigrante == 1:
+            iAceptados = iAceptados +1
+        else:
+            iDeportados = iDeportados +1
+
+    #Cont de cuantos dias se han jugado para la parte de ESTADISTICAS
+def dias_Jugados(decisionInmigrante):
+        for i in range:
+            diasJugados = 0
+            contInmigrantes = 0
+            if decisionInmigrante == 1 or decisionInmigrante == 2:
+                contInmigrantes = contInmigrantes +1
+                if contInmigrantes == 8:
+                    print("Dia finalizado")
+                    diasJugados = diasJugados +1
+                return
+
+    
 def main():
     menuPrincipal()
+    
 
 
     
