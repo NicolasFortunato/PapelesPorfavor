@@ -193,6 +193,7 @@ def menuPrincipal():
                     apellidos = ['Martínez', 'Romero', 'Perez', 'Alonso']
                     paises_validos = ['Argentina', 'Perú', 'Brasil', 'Chile']
                     paises_no_validos = ['Estados Unidos', 'España', 'Japón', 'Taiwán']
+                    dni = [random.randint(1000000, 99999999) for _ in range(10)]
                     paises = paises_validos + paises_no_validos
 
 
@@ -203,7 +204,7 @@ def menuPrincipal():
                             'apellido': random.choice(apellidos),
                             'edad': random.randint(1, 100),
                             'pais': random.choice(paises),
-                            'dni' : [random.choice(1000000, 99999999) for _ in range(10)]
+                            'pais': random.choice(dni),
                                 }
                         print(f"""
         ███████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████
