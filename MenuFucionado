@@ -1,5 +1,6 @@
 def menuPrincipal():
         import time
+        import random
         print("""███████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████                                                                                                                                                          
         █████████████████████████████████████████████████████████████████████████████            ██████████████████████████████████████████████████████████████████████████████ 
         ██████████████████████████████████████████████████████████████████████████       █  ██      ███████████████████████████████████████████████████████████████████████████ 
@@ -181,7 +182,84 @@ def menuPrincipal():
         ██████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████   PRESIONA 1 PARA CONTINUAR   ██████
         ██████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████                               ██████ 
         ███████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████ 
-        """)
+        """)    
+                eleccionJuego = int(input("Seleccione una opcion: "))     
+                if eleccionJuego == 1:
+                    puntaje = 0
+                    nombres = ['Blanca', 'José', 'Luisa', 'Mario']
+                    apellidos = ['Martínez', 'Romero', 'Perez', 'Alonso']
+                    paises_validos = ['Argentina', 'Perú', 'Brasil', 'Chile']
+                    paises_no_validos = ['Estados Unidos', 'España', 'Japón', 'Taiwán']
+                    paises = paises_validos + paises_no_validos
+
+                    print("Los requisitos de aceptacion de hoy son: \n Inmigrantes mayores de edad y de los siguientes paises", paises_validos)
+
+
+                    for i in range(8):
+
+                        datos = {
+                            'nombre': random.choice(nombres),
+                            'apellido': random.choice(apellidos),
+                            'edad': random.randint(1, 100),
+                            'pais': random.choice(paises),
+                            'dni': random.randint(1000000, 99999999),
+                                }
+                        print('Puntaje actual:', puntaje)
+                        print("------------------------------")
+                        print('Nombre:', datos['nombre'])
+                        print('Apellido:', datos['apellido'])
+                        print('Edad:', datos['edad'])
+                        print('Nacionalidad:', datos['pais'])
+                        print('DNI:', datos['dni'])
+                        print('------------------------------')
+
+                        if datos['edad'] < 18:
+                            valido = False
+                        elif datos['pais'] not in paises_validos:
+                            valido = False
+                            
+                        else: valido = True
+
+                        # print(valido)
+
+                        print('1. Aceptar')
+                        print('2. Denegar')
+                        opcion = int(input('Elige una opción: '))
+
+                        if valido == True and opcion == 1:
+                            puntaje += 1
+                            print('Ganaste 1 punto')
+
+                        elif valido == True and opcion == 2:
+                            puntaje -= 1
+                            print('Perdiste 1 punto')
+
+                        elif valido == False and opcion == 1:
+                            puntaje -= 1
+                            print('Perdiste 1 punto')
+
+                        elif valido == False and opcion == 2:
+                            puntaje += 1
+                            print('Ganaste 1 punto')
+
+                        else:
+                            print('Opción elegida no válida')
+                            print('Perdiste 1 punto')
+                            # Pierde puntos
+                        
+                        print()
+
+                    print('Partida finalizada')
+                    print('Puntaje final:', puntaje)
+                    timepoFinal = time.time() #Se detiene el cronometro
+                    tiempoTotal = timepoFinal - tiempoInicial 
+                    print("Tiempo de juego: ", tiempoTotal, "segundos") #.2f se refiere a que hayan 2 digitos despues de la coma
+                    recordTime = None
+                    if recordTime is None or recordTime < recordTime:
+                        recordTime = tiempoTotal
+                        print("!Hay un nuevo record, y ese es: ",recordTime,"!")
+
+
             if eleccionJuego == -2:
                 timepoFinal = time.time() #Se detiene el cronometro
                 tiempoTotal = timepoFinal - tiempoInicial 
@@ -243,9 +321,15 @@ def dias_Jugados(decisionInmigrante):
     
 def main():
     menuPrincipal()
+    cont_Inmigrantes_Decision()
+    dias_Jugados()
     
 
 
     
 
 main()
+
+
+
+
