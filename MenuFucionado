@@ -207,7 +207,7 @@ def menuPrincipal():
                 else:
                     if eleccionMenu == 3:
                         print("ESTADISTICAS\n")
-                        print("Mayor timepo de juego: ",)
+                        print("Mayor tiempo de juego: ",)
                         print("Inmigrantes deportados: ",)
                         print("Inmigrantes aceptados: ",)
                         print("Dias alcanzados: ",)
