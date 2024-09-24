@@ -190,7 +190,7 @@ def menuPrincipal():
                 if eleccionJuego == 1:
                     puntaje = 0
                     nombres = ["Juan", "Pablo", "Diego", "Gabriel", "Luis", "Ricardo", "Javier", "Martín", "Andrés", "Francisco", "Alejandro", "Manuel", "Nicolás", "Daniel", "Sergio", "Federico", "Carlos", "Mario", "Guillermo", "Enrique", "Ana", "María", "Laura", "Carolina", "Gabriela", "Patricia", "Cecilia", "Marta", "Lucía", "Natalia", "Paula", "Beatriz", "Mariana", "Juliana", "Andrea", "Alejandra", "Verónica", "Claudia", "Sonia", "Elena"]
-                    apellidos = 
+                    apellidos = []
                     paises_validos = ['Argentina', 'Perú', 'Brasil', 'Chile']
                     paises_no_validos = ['Estados Unidos', 'España', 'Japón', 'Taiwán']
                     dni = [random.randint(1000000,9999999) for i in range(10)]
