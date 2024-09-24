@@ -1,4 +1,4 @@
-   #MENU UNIDO
+    #MENU UNIDO
 def main():
     import time 
 
@@ -97,7 +97,6 @@ def main():
     █████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████
     """)
             eleccionJuego = int(input("Seleccione una opcion: "))
-            tiempoInicial = time.time() #Arranca el cronometro
             if eleccionJuego == 1:
                 print("""█████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████
     ██████████████████████████████████████████████████████████████████████████████████████████████████████▓▓█████████████████████████████████████████████████████████████████
@@ -186,7 +185,57 @@ def main():
         ███████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████ 
         """)
         #Seguir pantalla
-            elif eleccionJuego == -2:
+            def iniciar_juego():
+
+                tiempoInicial = time.time() #Arranca el cronometro
+                puntaje = 0
+
+                for i in range(8):
+
+                    datos = generar_documento()
+                    print('Puntaje actual:', puntaje)
+                    print('------------------------------')
+                    print('Nombre:', datos['nombre'])
+                    print('Apellido:', datos['apellido'])
+                    print('Edad:', datos['edad'])
+                    print('Nacionalidad:', datos['pais'])
+                    print('DNI:', datos['dni'])
+                    print('------------------------------')
+
+                    valido = validar_documento(datos)
+                    # print(valido)
+
+                    print('1. Aceptar')
+                    print('2. Denegar')
+                    opcion = int(input('Elige una opción: '))
+
+                    if valido == True and opcion == 1:
+                        puntaje += 1
+                        print('Ganaste 1 punto')
+                        iAceptados = iAceptados +1
+
+                    elif valido == True and opcion == 2:
+                        puntaje -= 1
+                        print('Perdiste 1 punto')
+                        iDeportados = iDeportados +1
+
+                    elif valido == False and opcion == 1:
+                        puntaje -= 1
+                        print('Perdiste 1 punto')
+                        iAceptados = iAceptados +1
+
+                    elif valido == False and opcion == 2:
+                        puntaje += 1
+                        print('Ganaste 1 punto')
+                        iDeportados = iDeportados +1 #Contador para las estadisticas
+
+                    else:
+                        print('Opción elegida no válida')
+                        print('Perdiste 1 punto')
+                        # Pierde puntos
+
+                print('Partida finalizada')
+                print('Puntaje final:', puntaje)
                 timepoFinal = time.time() #Se detiene el cronometro
                 tiempoTotal = timepoFinal - tiempoInicial 
                 print("Tiempo de juego: {tiempoTotal:.2f} segundos") #.2f se refiere a que hayan 2 digitos despues de la coma
@@ -194,27 +243,20 @@ def main():
                 if recordTime is None or recordTime < recordTime:
                     recordTime = tiempoTotal
                     print("!Hay un nuevo record, y ese es: ",recordTime,"!")
-            
 
-                
-
-    #Cargar partida guardada
-            else:
-                partidaGuardada1 = print("1. Partida Guardada numero 1.")
-                eleccionPartidaGuardada = int(input("Seleccione una opcion: "))
-                return eleccionPartidaGuardada
-    #Opciones
+        
+    #OPCIONES
         else:
             if eleccionMenu == 2:
-                print("1. Cantdad de inmigrantes \n")
-                eleccionInmigrante = int(input("S8eleccione una opcion: "))
-                if eleccionInmigrante == 1:
-                    print("1. 2 Inmigrantes.\n")
-                    print("2. 3 Inmigrantes")
-            #Cantidad de inmigrantes
-                    eleccionInmigrante = int(input("Seleccione una opcion"))
-                    return eleccionInmigrante
-    #Estadisticas       
+                print("1. Dificultad \n")
+                eleccionDificultad = int(input("Seleccione una opcion: "))
+                if eleccionDificultad == 1:
+                    print("1. Facil: 5 paises .\n")
+                    print("2. Normal: 6 paises")
+            #Cantidad de paises
+                    eleccionDificultad = int(input("Seleccione una opcion"))
+                    return eleccionDificultad
+    #ESTADISTICAS       
             else:
                 if eleccionMenu == 3:
                     print("ESTADISTICAS\n")
@@ -232,22 +274,29 @@ def main():
                     
         return eleccionMenu
 
-    #Cont de cuantos inmigrantes fueron aceptados o deportados para la parte de ESTADISTICAS
-    def cont_Inmigrantes_Decision(decisionInmigrante):
-        if decisionInmigrante == 1:
-            iAceptados = iAceptados +1
-        else:
-            iDeportados = iDeportados +1
+nombres = ['Blanca', 'José', 'Luisa', 'Mario']
+apellidos = ['Martínez', 'Romero', 'Perez', 'Alonso']
+paises_validos = ['Argentina', 'Perú', 'Brasil', 'Chile']
+paises_no_validos = ['Estados Unidos', 'España', 'Japón', 'Taiwán']
+paises = paises_validos + paises_no_validos
 
-    #Cont de cuantos dias se han jugado para la parte de ESTADISTICAS
-    def dias_Jugados(decisionInmigrante):
-        for i in range:
-            diasJugados = 0
-            contInmigrantes = 0
-            if decisionInmigrante == 1 or decisionInmigrante == 2:
-                contInmigrantes = contInmigrantes +1
-                if contInmigrantes == 8:
-                    print("Dia finalizado")
-                    diasJugados = diasJugados +1
-                return
+
+def generar_documento(): # Genera un documento totalmente al azar a partir de los datos cargados
+    import random
+    datos = {
+        'nombre': random.choice(nombres),
+        'apellido': random.choice(apellidos),
+        'edad': random.randint(1, 100),
+        'pais': random.choice(paises),
+        'dni': random.randint(1000000, 99999999),
+    }
+    return datos
+
+
+def validar_documento(datos): # Recibe un documento generado al azar y devuelve True si es válido y False si no lo es
+    if datos['edad'] < 18:
+        return False
+    if datos['pais'] not in paises_validos:
+        return False
     
+    return True
