@@ -204,7 +204,7 @@ def menuPrincipal():
                             'apellido': random.choice(apellidos),
                             'edad': random.randint(1, 100),
                             'pais': random.choice(paises),
-                            'pais': random.choice(dni),
+                            'dni': random.choice(dni),
                                 }
                         print(f"""
         ███████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████
