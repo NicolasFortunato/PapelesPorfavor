@@ -31,7 +31,7 @@ def mostrar_menu(tiempoRecord, ):
     else:
         if eleccionMenu == 2:
             print("1. Cantdad de inmigrantes \n")
-            eleccionInmigrante = int(input("S8eleccione una opcion: "))
+            eleccionInmigrante = int(input("Seleccione una opcion: "))
             if eleccionInmigrante == 1:
                 print("1. 2 Inmigrantes.\n")
                 print("2. 3 Inmigrantes")
