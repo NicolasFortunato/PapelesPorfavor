@@ -190,10 +190,10 @@ def menuPrincipal():
                 if eleccionJuego == 1:
                     puntaje = 0
                     nombres = ["Juan", "Pablo", "Diego", "Gabriel", "Luis", "Ricardo", "Javier", "Martín", "Andrés", "Francisco", "Alejandro", "Manuel", "Nicolás", "Daniel", "Sergio", "Federico", "Carlos", "Mario", "Guillermo", "Enrique", "Ana", "María", "Laura", "Carolina", "Gabriela", "Patricia", "Cecilia", "Marta", "Lucía", "Natalia", "Paula", "Beatriz", "Mariana", "Juliana", "Andrea", "Alejandra", "Verónica", "Claudia", "Sonia", "Elena"]
-                    apellidos = ["Gómez", "Rodríguez", "Fernández", "González", "Messi", "Pérez", "Martínez", "García", "Silva", "Romero", "Morales", "López", "Fernández", "Bianchi", "Ferrari", "Costa", "Lombardi", "Russo", "Moretti", "Gallo", "Alfieri", "Mancini", "Santoro", "Ricci", "Tognini", "Mazzola", "Romano", "Barone", "Giordano", "Salvi", "Pugliese", "Benedetti", "Colombo", "Ferrari", "Vitale", "Russo", "Marchese", "Eichman", "Karas", "Fortunato"]
+                    apellidos = ["pepeneitor"]
                     paises_validos = ['Argentina', 'Perú', 'Brasil', 'Chile']
                     paises_no_validos = ['Estados Unidos', 'España', 'Japón', 'Taiwán']
-                    dni = [random.randint(1000000,9999999) for i in range(10)]
+                    dni = [random.randint(1000000,9999999) for i in range(10)] #Lista por compresion 
                     paises = paises_validos + paises_no_validos
 
 
@@ -286,8 +286,7 @@ def menuPrincipal():
 
                     print('Partida finalizada')
                     print('Puntaje final:', puntaje)
-                    timepoFinal = time.time() #Se detiene el cronometro
-                    tiempoTotal = timepoFinal - tiempoInicial 
+                    tiempoTotal = (lambda tiempoInicial: time.time() - tiempoInicial)(tiempoInicial) 
                     print("Tiempo de juego: ", tiempoTotal, "segundos") #.2f se refiere a que hayan 2 digitos despues de la coma
                     recordTime = None
                     if recordTime is None or recordTime < recordTime:
