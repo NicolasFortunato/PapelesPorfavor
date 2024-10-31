@@ -72,28 +72,18 @@ def menuDos():
     except ValueError:
         print("Error en la eleccion, por favor, ingresa una opcion valida.")
         menuDos()
-def menuTres(eleccionMenu,):
+def menuTres():
     try:            
         print("Felicidades! Conseguiste tu primer trabajo.\n  Presiona 1 para continuar.\n Presiona -1 para salir.")
-        menuPrincipal()
         eleccionJuego = int(input("Seleccione una opcion: "))      
-        if eleccionMenu == 1:
+        if eleccionJuego == 1:
             juego()
         else:
-            if eleccionMenu == 2:
-                menuOpciones()
-                if eleccionJuego == 2:
-                    return menuPrincipal()         
-    
-            else:
-                if eleccionMenu == 3:
-                    menuEstadisticas()
-                else:
-                    print("Gracias por jugar Papeles, Por Favor.")
+            if eleccionJuego == -1:
+                menuPrincipal()        
     except IOError:
         print("Error en la opcion elegida")
         menuTres()                
-        return eleccionMenu
 
 iAceptados = 0
 iDeportados = 0
@@ -122,7 +112,7 @@ def generacion():
         print("El archivo no se pudo crear correctamente")
     finally:
 	    Personas.close()
-def juego(paises_validos, recordTime, nombres, apellidos, paises, dni):
+def juego(paises_validos, nombres, apellidos, paises, dni, puntaje):
     import random
     import time
     global diasJugados
@@ -170,19 +160,22 @@ def juego(paises_validos, recordTime, nombres, apellidos, paises, dni):
     else: valido = True
     validacion()
     # print(valido)
-
-def validacion(valido, puntaje,):
+def validacion(valido, puntaje):
     try:
         opcion = int(input('Elige una opción: '))
         if (valido and opcion == 1) or (not valido and opcion == 2):
-     	    puntaje += 1
+            puntaje += 1
+            print("Correcto, has ganado un punto.")
         else:
             puntaje -= 1
+            print("Incorrecto, has perdido un punto.")
     except ValueError:
-        print('Opción elegida no válida, por favor, elige una opcion correcta.')
+        print('Opción elegida no válida, por favor, elige una opción correcta.')
     
+    # Asegúrate de que estas funciones estén definidas en el código principal
     cont_Inmigrantes_Decision(opcion)
     diaFinalizado()
+
     return puntaje
 
 def diaFinalizado(puntaje ):
@@ -231,6 +224,44 @@ def menuOpciones():
                 return 
         return eleccionInmigrante  
 
+#Sistema de logros
+def logros():
+    logros = [
+    {"name": "Primer Paso", "description": "Completa el primer día con éxito.", "condition": lambda score, streak: score > 0},
+    {"name": "Racha de Experto", "description": "Alcanza una racha de 5 decisiones correctas consecutivas.", "condition": lambda score, streak: streak >= 5},
+    {"name": "Novato", "description": "Acumula 10 puntos en total.", "condition": lambda score, streak: score >= 10},
+    {"name": "Profesional", "description": "Acumula 50 puntos en total.", "condition": lambda score, streak: score >= 50},
+    {"name": "Perfecto", "description": "Completa un día sin errores.", "condition": lambda score, streak, errors: errors == 0},
+    ]
+    logros_desbloqueados = {logros["name"]: False for logros in logros}
+
+def check_achievements(score, streak, errors, logros, logros_desbloqueados):
+    for achievement in logros:
+        if not logros_desbloqueados[achievement["name"]] and achievement["condition"](score, streak, errors):
+            logros_desbloqueados[achievement["name"]] = True
+            print(f"¡Logro desbloqueado: {achievement['name']}! - {achievement['description']}")
+
+def mostrar_logros(logros_desbloqueados, logros):
+    print("Logros:")
+    for achievement in logros:
+        estado = "Desbloqueado" if logros_desbloqueados[achievement["name"]] else "Pendiente"
+        print(f"{achievement['name']}: {estado} - {achievement['description']}")
+
+def archivo_de_logros():
+    import json
+
+    # Guardar logros
+    with open("logros.json", "w") as file:
+        json.dump(unlocked_achievements, file)
+
+    # Cargar logros
+    with open("logros.json", "r") as file:
+        unlocked_achievements = json.load(file)
+
+            
+
+
+
 
 diasjugados = 0 
 def diasJugados(diasjugados):
@@ -255,6 +286,5 @@ def main():
     
 
 main()
-
 
 
