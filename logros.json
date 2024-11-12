@@ -1,0 +1,8 @@
+{
+    "aprobaciones_perfectas": true,
+    "negaciones_correctas": true,
+    "primera_aprobacion": true,
+    "primer_rechazo": true,
+    "deshacer_decision": false,
+    "decisiones_extra_puntos": false
+}
