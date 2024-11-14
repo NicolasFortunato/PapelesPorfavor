@@ -86,6 +86,63 @@ def mostrar_habilidades():
     print(f"- Decisiones extra puntos: {'Comprada' if logros['decisiones_extra_puntos'] else 'No comprada'}, {'Activa' if puntos_extra else 'No activa'}")
     print("="*30)
 
+# Función recursiva para tomar decisiones
+def tomar_decision(inmigrante, turno):
+    global deshacer_disponible, puntos_extra
+
+    # Mostrar información del inmigrante
+    print(f"\nInmigrante #{turno + 1}:")
+    print(f"Nombre: {inmigrante.nombre}")
+    print(f"País de origen: {inmigrante.pais_origen}")
+    print(f"Razón de entrada: {inmigrante.razon}")
+    print(f"Documento: {inmigrante.documento}")
+    print(f"DNI: {inmigrante.dni}")
+    print(f"Puntos actuales: {estadisticas['puntos']}")
+
+    # Verificar si la entrada es válida
+    decision_correcta = inmigrante.es_valido()
+
+    # Pedir la decisión
+    while True:
+        decision = input("¿Apruebas (s) o rechazas (n) la entrada? ")
+        if decision.lower() not in ["s", "n"]:
+            print("Por favor, ingresa 's' para aprobar o 'n' para rechazar.")
+            continue
+
+        # Determinar puntos y tipo de decisión
+        puntos_obtenidos = 10 if (decision.lower() == "s" and decision_correcta) or \
+                              (decision.lower() == "n" and not decision_correcta) else -5
+
+        if puntos_extra:
+            puntos_obtenidos += 5
+
+        estadisticas["puntos"] += puntos_obtenidos
+        if decision_correcta and decision.lower() == "s":
+            estadisticas["aprobaciones"] += 1
+        elif not decision_correcta and decision.lower() == "n":
+            estadisticas["rechazos"] += 1
+
+        # Verificar si hay un error en la decisión y si el jugador puede deshacer
+        if not decision_correcta and decision.lower() == "s":
+            print("Decisión incorrecta.")
+            if logros["deshacer_decision"] and deshacer_disponible > 0:
+                deshacer = input("¿Quieres deshacer la última decisión incorrecta? (s/n): ")
+                if deshacer.lower() == "s":
+                    estadisticas["puntos"] -= puntos_obtenidos  # Revertir los puntos
+                    deshacer_disponible -= 1
+                    print("Has deshecho la última decisión. Vuelve a tomar una decisión.")
+                    return tomar_decision(inmigrante, turno)  # Llamada recursiva para volver a tomar la decisión
+                else:
+                    break
+            else:
+                break
+        else:
+            print("¡Decisión correcta!")
+            break
+
+    time.sleep(0.5)
+    print("\n" + "-"*30)
+
 # Función principal del juego
 def iniciar_juego():
     global deshacer_disponible, puntos_extra
@@ -104,55 +161,7 @@ def iniciar_juego():
 
         for turno in range(8):
             inmigrante = Inmigrante()
-            print(f"\nInmigrante #{turno + 1}:")
-            print(f"Nombre: {inmigrante.nombre}")
-            print(f"País de origen: {inmigrante.pais_origen}")
-            print(f"Razón de entrada: {inmigrante.razon}")
-            print(f"Documento: {inmigrante.documento}")
-            print(f"DNI: {inmigrante.dni}")
-            print(f"Puntos actuales: {estadisticas['puntos']}")
-
-            # Verificar si la entrada es válida
-            decision_correcta = inmigrante.es_valido()
-            
-            while True:
-                decision = input("¿Apruebas (s) o rechazas (n) la entrada? ")
-                if decision.lower() not in ["s", "n"]:
-                    print("Por favor, ingresa 's' para aprobar o 'n' para rechazar.")
-                    continue
-
-                # Determinar puntos y tipo de decisión
-                puntos_obtenidos = 10 if (decision.lower() == "s" and decision_correcta) or \
-                                          (decision.lower() == "n" and not decision_correcta) else -5
-
-                if puntos_extra:
-                    puntos_obtenidos += 5
-
-                estadisticas["puntos"] += puntos_obtenidos
-                if decision_correcta and decision.lower() == "s":
-                    estadisticas["aprobaciones"] += 1
-                elif not decision_correcta and decision.lower() == "n":
-                    estadisticas["rechazos"] += 1
-                else:
-                    errores_dia += 1
-
-                # Verificar si hay un error en la decisión y si el jugador puede deshacer
-                if not decision_correcta and decision.lower() == "s":
-                    print("Decisión incorrecta.")
-                    if logros["deshacer_decision"] and deshacer_disponible > 0:
-                        deshacer = input("¿Quieres deshacer la última decisión incorrecta? (s/n): ")
-                        if deshacer.lower() == "s":
-                            estadisticas["puntos"] -= puntos_obtenidos  # Revertir los puntos
-                            deshacer_disponible -= 1
-                            print("Has deshecho la última decisión. Vuelve a tomar una decisión.")
-                            continue  # Permite repetir la decisión para el mismo inmigrante
-                else:
-                    print("¡Decisión correcta!" if decision_correcta else "Decisión incorrecta.")
-
-                break
-
-            time.sleep(0.5)
-            print("\n" + "-"*30)
+            tomar_decision(inmigrante, turno)  # Llamamos a la función recursiva para tomar decisiones
 
         guardar_logros()
         guardar_estadisticas()
@@ -182,76 +191,13 @@ def menu_principal():
     limpiar_consola()
     print("\n" + "="*30)
     print("¡Bienvenido a 'Fronteras Argentinas'!")
-    print("1. Iniciar Juego")
-    print("2. Ver Reglas")
-    print("3. Ver Estadísticas")
-    print("4. Ver Logros")
-    print("5. Ir a la Tienda")
+    print("1. Iniciar juego")
+    print("2. Mostrar reglas")
+    print("3. Ver estadísticas")
+    print("4. Ver logros")
+    print("5. Tienda")
     print("6. Salir")
     print("="*30)
-
-def mostrar_reglas():
-    limpiar_consola()
-    print("\n" + "="*30)
-    print("Reglas del Juego:")
-    print("1. Verifica que el inmigrante tenga un documento válido.")
-    print("2. Asegúrate de que la razón de entrada sea válida.")
-    print("3. Responde con 's' para aprobar y 'n' para rechazar.")
-    print("4. Cada decisión correcta suma puntos.")
-    print("="*30)
-    input("\nPresiona Enter para volver al menú principal...")
-
-def mostrar_estadisticas():
-    limpiar_consola()
-    print("\n" + "="*30)
-    print("Estadísticas del Juego:")
-    print(f"Aprobaciones correctas: {estadisticas['aprobaciones']}")
-    print(f"Rechazos correctos: {estadisticas['rechazos']}")
-    print(f"Puntos acumulados: {estadisticas['puntos']}")
-    print("="*30)
-    input("\nPresiona Enter para volver al menú principal...")
-
-def mostrar_logros():
-    limpiar_consola()
-    print("\n" + "="*30)
-    print("Logros alcanzados:")
-    for logro, estado in logros.items():
-        print(f"{logro}: {'Alcanzado' if estado else 'No alcanzado'}")
-    print("="*30)
-    input("\nPresiona Enter para volver al menú principal...")
-
-def tienda():
-    global deshacer_disponible, puntos_extra
-    limpiar_consola()
-    print("\n" + "="*30)
-    print("Tienda")
-    print(f"Puntos actuales: {estadisticas['puntos']}")
-    print("1. Comprar deshacer decisión (100 puntos)")
-    print("2. Comprar puntos extra en decisiones (150 puntos)")
-    print("="*30)
-
-    while True:
-        opcion = input("¿Qué deseas comprar? (1/2) o (s) para salir: ")
-        if opcion == '1' and estadisticas["puntos"] >= 100:
-            logros["deshacer_decision"] = True
-            deshacer_disponible += 1
-            estadisticas["puntos"] -= 100
-            print("¡Has comprado la opción de deshacer decisión!")
-        elif opcion == '2' and estadisticas["puntos"] >= 150:
-            logros["decisiones_extra_puntos"] = True
-            puntos_extra = True
-            estadisticas["puntos"] -= 150
-            print("¡Has comprado puntos extra en decisiones!")
-        elif opcion == 's':
-            break
-        else:
-            print("Opción no válida o puntos insuficientes.")
-        
-        guardar_logros()
-        guardar_estadisticas()
-        break
-
-    input("\nPresiona Enter para volver al menú principal...")
 
 # Loop principal
 def main():
@@ -266,13 +212,13 @@ def main():
         if opcion == "1":
             iniciar_juego()
         elif opcion == "2":
-            mostrar_reglas()
+            pass  # Mostrar reglas
         elif opcion == "3":
-            mostrar_estadisticas()
+            pass  # Mostrar estadísticas
         elif opcion == "4":
-            mostrar_logros()
+            pass  # Mostrar logros
         elif opcion == "5":
-            tienda()
+            pass  # Tienda
         elif opcion == "6":
             print("¡Gracias por jugar!")
             break
@@ -281,3 +227,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+
