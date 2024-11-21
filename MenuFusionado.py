@@ -1,7 +1,6 @@
 import os
 import json
 import random
-import time
 
 # Función para limpiar consola
 def limpiar_consola():
@@ -12,85 +11,93 @@ paises_validos = ["Argentina", "Chile", "Uruguay", "Bolivia", "Paraguay", "Brasi
 razones_entrada_validas = ["Turismo", "Trabajo", "Estudio", "Residencia"]
 documentos_validos = ["DNI", "Pasaporte", "Permiso de Trabajo"]
 
-logros = {
+# Función para cargar datos JSON
+def cargar_datos(nombre_archivo, datos_por_defecto):
+    if os.path.exists(nombre_archivo):
+        with open(nombre_archivo, "r") as archivo:
+            return json.load(archivo)
+    return datos_por_defecto
+
+# Datos iniciales
+logros = cargar_datos("logros.json", {
     "aprobaciones_perfectas": False,
     "negaciones_correctas": False,
     "primera_aprobacion": False,
     "primer_rechazo": False,
-    "deshacer_decision": False,
-    "decisiones_extra_puntos": False
-}
+    "deshacer_decision": False
+})
 
-estadisticas = {
+estadisticas = cargar_datos("estadisticas.json", {
     "aprobaciones": 0,
     "rechazos": 0,
     "puntos": 0
-}
+})
 
-# Variables de control para habilidades adquiridas
-deshacer_disponible = 0  # Para controlar el uso de deshacer decisión
-puntos_extra = False     # Indica si la habilidad de puntos extra está activa
+habilidades = cargar_datos("habilidades.json", {
+    "deshacer_disponible": 0,
+    "puntos_extra": False
+})
 
-# Funciones para guardar y cargar logros y estadísticas
-def guardar_logros():
-    with open("logros.json", "w") as f:
-        json.dump(logros, f, indent=4)
-
-def guardar_estadisticas():
-    with open("estadisticas.json", "w") as f:
-        json.dump(estadisticas, f, indent=4)
-
-def cargar_logros():
-    try:
-        with open("logros.json", "r") as f:
-            return json.load(f)
-    except FileNotFoundError:
-        return logros
-
-def cargar_estadisticas():
-    try:
-        with open("estadisticas.json", "r") as f:
-            return json.load(f)
-    except FileNotFoundError:
-        return estadisticas
+# Función para guardar datos JSON
+def guardar_datos(nombre_archivo, datos):
+    with open(nombre_archivo, "w") as archivo:
+        json.dump(datos, archivo, indent=4)
 
 # Clase Inmigrante
 class Inmigrante:
     def __init__(self):
         self.nombre = random.choice(["Juan", "Maria", "Carlos", "Ana", "Pedro", "Lucia"])
-        # Generar país, razón y documento de manera aleatoria
-        self.pais_origen = random.choice(paises_validos + ["Peru", "Ecuador", "Venezuela", "Colombia", "Guyana"])
-        self.razon = random.choice(razones_entrada_validas + ["Negocios", "Visita médica", "Evento Deportivo"])
-        self.documento = random.choice(documentos_validos + ["Carnet de Estudiante", "ID Nacional", "Permiso Temporal"])
+        self.pais_origen = random.choice(paises_validos + ["Peru", "Ecuador", "Venezuela", "Colombia"])
+        self.razon = random.choice(razones_entrada_validas + ["Negocios", "Visita médica"])
+        self.documento = random.choice(documentos_validos + ["Carnet de Estudiante", "Permiso Temporal"])
         self.dni = "".join([str(random.randint(0, 9)) for _ in range(8)])
 
     def es_valido(self):
-        # Verifica que el inmigrante cumpla todos los criterios válidos
         return (self.pais_origen in paises_validos and
                 self.razon in razones_entrada_validas and
                 self.documento in documentos_validos)
 
-def mostrar_criterios_validos():
-    limpiar_consola()
+# Funciones para mostrar datos válidos y habilidades
+def mostrar_datos_validos():
     print("\n" + "="*30)
-    print("Criterios de entrada válidos:")
-    print(f"- Países permitidos: {', '.join(paises_validos)}")
-    print(f"- Razones de entrada permitidas: {', '.join(razones_entrada_validas)}")
-    print(f"- Documentos aceptables: {', '.join(documentos_validos)}")
-    print("="*30 + "\n")
-
-# Función para mostrar el estado de las habilidades
-def mostrar_habilidades():
-    print(f"\nHabilidades Compradas y Activadas:")
-    print(f"- Deshacer decisión: {'Comprada' if logros['deshacer_decision'] else 'No comprada'}, {'Activa' if deshacer_disponible > 0 else 'No activa'}")
-    print(f"- Decisiones extra puntos: {'Comprada' if logros['decisiones_extra_puntos'] else 'No comprada'}, {'Activa' if puntos_extra else 'No activa'}")
+    print("Datos válidos para la jornada:")
+    print(f"- Países válidos: {', '.join(paises_validos)}")
+    print(f"- Documentos válidos: {', '.join(documentos_validos)}")
+    print(f"- Motivos válidos: {', '.join(razones_entrada_validas)}")
     print("="*30)
 
-# Función recursiva para tomar decisiones
-def tomar_decision(inmigrante, turno):
-    global deshacer_disponible, puntos_extra
+def mostrar_habilidades():
+    print("\nHabilidades compradas:")
+    if habilidades["deshacer_disponible"] > 0:
+        print(f"- 'Deshacer decisión': Disponible ({habilidades['deshacer_disponible']} usos restantes)")
+    if habilidades["puntos_extra"]:
+        print("- 'Puntos extra': Activado")
+    print("="*30)
 
-    # Mostrar información del inmigrante
+# Función para mostrar logros
+def mostrar_logros():
+    limpiar_consola()
+    print("\n" + "="*30)
+    print("Logros Desbloqueados:")
+    for logro, desbloqueado in logros.items():
+        estado = "Desbloqueado" if desbloqueado else "Bloqueado"
+        print(f"- {logro.replace('_', ' ').capitalize()}: {estado}")
+    print("="*30)
+    input("\nPresiona Enter para volver al menú principal.")
+
+# Función para mostrar estadísticas
+def mostrar_estadisticas():
+    limpiar_consola()
+    print("\n" + "="*30)
+    print("Estadísticas del Juego:")
+    print(f"- Aprobaciones correctas: {estadisticas['aprobaciones']}")
+    print(f"- Rechazos correctos: {estadisticas['rechazos']}")
+    print(f"- Puntos actuales: {estadisticas['puntos']}")
+    print("="*30)
+    input("\nPresiona Enter para volver al menú principal.")
+
+# Función para tomar decisiones
+def tomar_decision(inmigrante, turno):
     print(f"\nInmigrante #{turno + 1}:")
     print(f"Nombre: {inmigrante.nombre}")
     print(f"País de origen: {inmigrante.pais_origen}")
@@ -99,132 +106,116 @@ def tomar_decision(inmigrante, turno):
     print(f"DNI: {inmigrante.dni}")
     print(f"Puntos actuales: {estadisticas['puntos']}")
 
-    # Verificar si la entrada es válida
     decision_correcta = inmigrante.es_valido()
-
-    # Pedir la decisión
     while True:
-        decision = input("¿Apruebas (s) o rechazas (n) la entrada? ")
-        if decision.lower() not in ["s", "n"]:
-            print("Por favor, ingresa 's' para aprobar o 'n' para rechazar.")
+        decision = input("¿Aprobar (s) o rechazar (n)? ").lower()
+        if decision not in ["s", "n"]:
+            print("Por favor, ingresa 's' o 'n'.")
             continue
 
-        # Determinar puntos y tipo de decisión
-        puntos_obtenidos = 10 if (decision.lower() == "s" and decision_correcta) or \
-                              (decision.lower() == "n" and not decision_correcta) else -5
+        puntos = 10 if (decision == "s" and decision_correcta) or (decision == "n" and not decision_correcta) else -5
+        if habilidades["puntos_extra"]:
+            puntos += 5
+        estadisticas["puntos"] += puntos
 
-        if puntos_extra:
-            puntos_obtenidos += 5
-
-        estadisticas["puntos"] += puntos_obtenidos
-        if decision_correcta and decision.lower() == "s":
-            estadisticas["aprobaciones"] += 1
-        elif not decision_correcta and decision.lower() == "n":
-            estadisticas["rechazos"] += 1
-
-        # Verificar si hay un error en la decisión y si el jugador puede deshacer
-        if not decision_correcta and decision.lower() == "s":
-            print("Decisión incorrecta.")
-            if logros["deshacer_decision"] and deshacer_disponible > 0:
-                deshacer = input("¿Quieres deshacer la última decisión incorrecta? (s/n): ")
-                if deshacer.lower() == "s":
-                    estadisticas["puntos"] -= puntos_obtenidos  # Revertir los puntos
-                    deshacer_disponible -= 1
-                    print("Has deshecho la última decisión. Vuelve a tomar una decisión.")
-                    return tomar_decision(inmigrante, turno)  # Llamada recursiva para volver a tomar la decisión
-                else:
-                    break
-            else:
-                break
-        else:
+        if puntos > 0:
             print("¡Decisión correcta!")
-            break
+            if decision == "s":
+                estadisticas["aprobaciones"] += 1
+            else:
+                estadisticas["rechazos"] += 1
+        else:
+            print("¡Decisión incorrecta!")
 
-    time.sleep(0.5)
-    print("\n" + "-"*30)
+        if habilidades["deshacer_disponible"] > 0:
+            deshacer = input("¿Quieres deshacer esta decisión? (s/n): ").lower()
+            if deshacer == "s":
+                habilidades["deshacer_disponible"] -= 1
+                estadisticas["puntos"] -= puntos
+                print("Decisión deshecha. Hazla de nuevo.")
+                continue
+        return 1 if puntos < 0 else 0
 
-# Función principal del juego
+# Función para iniciar el juego
 def iniciar_juego():
-    global deshacer_disponible, puntos_extra
-
     limpiar_consola()
-    print("\n¡Iniciando el juego!\n")
-    
-    dias_con_errores = 0
-
-    for dia in range(1, 4):
-        print(f"\nDía {dia}")
-        mostrar_criterios_validos()
-        mostrar_habilidades()  # Mostrar habilidades antes de cada día
-        
+    print("¡Iniciando el juego!")
+    for dia in range(10):  # Hasta 10 días
+        limpiar_consola()
+        print(f"\nDía {dia + 1}")
+        mostrar_habilidades()
+        mostrar_datos_validos()
         errores_dia = 0
 
-        for turno in range(8):
+        for turno in range(8):  # 8 inmigrantes por día
             inmigrante = Inmigrante()
-            tomar_decision(inmigrante, turno)  # Llamamos a la función recursiva para tomar decisiones
-
-        guardar_logros()
-        guardar_estadisticas()
+            errores_dia += tomar_decision(inmigrante, turno)
 
         if errores_dia >= 3:
-            dias_con_errores += 1
-        else:
-            dias_con_errores = 0
-        
-        if dias_con_errores >= 2:
-            print("Noticia: Disturbios en el centro del país debido a una nueva ola de inmigrantes ilegales.")
-        
-        while True:
-            continuar = input("¿Deseas continuar al siguiente día o volver al menú principal? (c/m): ")
-            if continuar.lower() == 'm':
-                return
-            elif continuar.lower() == 'c':
-                break
-            else:
-                print("Debe ingresar 'c' o 'm'.")
+            print("\nNoticia: Disturbios en la ciudad debido a inmigrantes ilegales.")
 
-    print("\nJuego terminado.")
-    input("\nPresiona Enter para volver al menú principal...")
+        guardar_datos("logros.json", logros)
+        guardar_datos("estadisticas.json", estadisticas)
+        guardar_datos("habilidades.json", habilidades)
 
-# Funciones de menú y otras opciones
-def menu_principal():
+        continuar = input("¿Quieres continuar con el siguiente día (s/n)? ").lower()
+        if continuar != "s":
+            break
+
+# Función de la tienda
+def tienda():
     limpiar_consola()
-    print("\n" + "="*30)
-    print("¡Bienvenido a 'Fronteras Argentinas'!")
-    print("1. Iniciar juego")
-    print("2. Mostrar reglas")
-    print("3. Ver estadísticas")
-    print("4. Ver logros")
-    print("5. Tienda")
-    print("6. Salir")
-    print("="*30)
-
-# Loop principal
-def main():
-    global logros, estadisticas
-    logros = cargar_logros()
-    estadisticas = cargar_estadisticas()
-    
+    print("Bienvenido a la Tienda. Puedes comprar habilidades con tus puntos.")
+    print(f"1. Deshacer decisión (50 puntos): {habilidades['deshacer_disponible']} usos disponibles")
+    print(f"2. Puntos extra (100 puntos): {'Activado' if habilidades['puntos_extra'] else 'No activado'}")
+    print(f"3. Salir de la Tienda")
+    print(f"Puntos disponibles: {estadisticas['puntos']}")
     while True:
-        menu_principal()
         opcion = input("Selecciona una opción: ")
-        
+        if opcion == "1" and estadisticas["puntos"] >= 50:
+            habilidades["deshacer_disponible"] += 1
+            estadisticas["puntos"] -= 50
+            print("Has comprado un uso de 'Deshacer decisión'.")
+        elif opcion == "2" and estadisticas["puntos"] >= 100:
+            habilidades["puntos_extra"] = True
+            estadisticas["puntos"] -= 100
+            print("Has activado 'Puntos extra'.")
+        elif opcion == "3":
+            break
+        else:
+            print("Opción no válida o puntos insuficientes.")
+    guardar_datos("habilidades.json", habilidades)
+    guardar_datos("estadisticas.json", estadisticas)
+
+# Menú principal
+def menu_principal():
+    while True:
+        limpiar_consola()
+        print("\n" + "="*30)
+        print("Menú Principal")
+        print("1. Iniciar juego")
+        print("2. Mostrar logros")
+        print("3. Mostrar estadísticas")
+        print("4. Tienda")
+        print("5. Salir")
+        print("="*30)
+        opcion = input("Selecciona una opción: ")
         if opcion == "1":
             iniciar_juego()
         elif opcion == "2":
-            pass  # Mostrar reglas
+            mostrar_logros()
         elif opcion == "3":
-            pass  # Mostrar estadísticas
+            mostrar_estadisticas()
         elif opcion == "4":
-            pass  # Mostrar logros
+            tienda()
         elif opcion == "5":
-            pass  # Tienda
-        elif opcion == "6":
-            print("¡Gracias por jugar!")
             break
-        else:
-            print("Por favor, selecciona una opción válida.")
 
+# Función principal
+def main():
+    menu_principal()
+
+# Ejecución
 if __name__ == "__main__":
     main()
 
